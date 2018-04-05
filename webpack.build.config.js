@@ -1,10 +1,14 @@
 /*global require,module,__dirname*/
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+  , MiniCssExtractPlugin = require('mini-css-extract-plugin')
+  , CleanWebpackPlugin = require('clean-webpack-plugin')
   , webpack = require('webpack')
   , path = require('path')
+  , pathsToClean = [
+      'dist'
+    ]
   , SRC_DIR = path.resolve(__dirname, 'src')
   , OUTPUT_DIR = path.resolve(__dirname, 'dist')
-  , defaultInclude = [SRC_DIR]
   , config = {
     'entry': [
       'react-hot-loader/patch',
@@ -12,21 +16,24 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
     ],
     'output': {
       'path': OUTPUT_DIR,
-      'publicPath': '/',
+      'publicPath': './',
       'filename': 'bundle.js'
     },
     'module': {
       'rules': [
         {
           'test': /\.scss$/,
-          'use': [{
-            'loader': 'style-loader'
-          }, {
-            'loader': 'css-loader'
-          }, {
-            'loader': 'sass-loader'
-          }],
-          'include': defaultInclude
+          'use': [
+            MiniCssExtractPlugin.loader,
+            {
+              'loader': 'css-loader',
+              'options': {
+                'sourceMap': true,
+                'importLoader': 2
+              }
+            },
+            'sass-loader'
+          ]
         },
         {
           'test': /\.(js|jsx)$/,
@@ -48,15 +55,16 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
       'extensions': ['*', '.js', '.jsx']
     },
     'plugins': [
+      new CleanWebpackPlugin(pathsToClean),
       new webpack.HotModuleReplacementPlugin(),
+      new MiniCssExtractPlugin({
+        'filename': 'bundle.[contenthash].css',
+        'chunkFilename': '[id].css'
+      }),
       new HtmlWebpackPlugin({
         'template': `${SRC_DIR}/index.html`
       })
-    ],
-    'devServer': {
-      'contentBase': OUTPUT_DIR,
-      'hot': true
-    }
+    ]
   };
 
 module.exports = config;
