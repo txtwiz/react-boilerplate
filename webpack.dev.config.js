@@ -54,6 +54,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
       })
     ],
     'devServer': {
+      'historyApiFallback': true,
       'contentBase': OUTPUT_DIR,
       'hot': true
     }
