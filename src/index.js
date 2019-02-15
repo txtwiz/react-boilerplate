@@ -8,7 +8,10 @@ import './assets/scss/main.scss';
 const title = 'My Minimal Setup';
 
 ReactDOM.render(
-  <div className="title">{title}</div>,
+  <div className="title">
+    <img alt="header" src="/dist/images/header.jpg" className="app-header" />
+    { title }
+  </div>,
   document.getElementById('app')
 );
 

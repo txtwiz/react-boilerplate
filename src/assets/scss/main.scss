@@ -3,3 +3,9 @@ $primary-color: red;
 .title {
   background-color: $primary-color;
 }
+
+.app-header {
+  height: 250px;
+  width: inherit;
+  object-fit: cover;
+}
